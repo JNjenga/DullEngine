@@ -16,6 +16,10 @@ void DE::Window::create(int width, int height)
 	glfwMakeContextCurrent(mWindow);
 	glfwSwapInterval(1);
 	should_close = false;
+	auto fb_clbk = [](GLFWwindow *win, int w, int h){
+		glViewport(0,0,w,h);
+	};
+	glfwSetFramebufferSizeCallback(mWindow, fb_clbk);
 }
 
 void DE::Window::update()

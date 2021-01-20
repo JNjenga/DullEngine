@@ -136,20 +136,89 @@ int DE::GL::create_vao(float vertices[], int vsize, unsigned int indices[], int 
 	return vao;
 }
 
-void DE::GL::draw_mesh(int vao, int vertex_count)
+int DE::GL::create_vao(vao_data_t * vd)
 {
+	unsigned int vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	unsigned int vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vd->vertices) * vd->vsize, vd->vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)(0));
+	glEnableVertexAttribArray(0);
+	
+	glCheckError_(__FILE__, __LINE__);
+
+	if(vd->tsize > 0)
+	{
+		unsigned int tbo;
+		glGenBuffers(1, &tbo);
+		glBindBuffer(GL_ARRAY_BUFFER, tbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vd->texture_coords) * vd->tsize, vd->texture_coords, GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(0));
+		glEnableVertexAttribArray(1);
+		glCheckError_(__FILE__, __LINE__);
+	}
+	
+	if(vd->isize > 0)
+	{
+		unsigned int ebo;
+		glGenBuffers(1, &ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vd->indices) * vd->isize, vd->indices, GL_STATIC_DRAW);
+		glCheckError_(__FILE__, __LINE__);
+	}
+
+	return vao;
+}
+
+int DE::GL::create_texture(unsigned char * data, int width, int height, int depth  )
+{
+	unsigned int tex_id;
+	glGenTextures(1, &tex_id);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	if(depth == 4)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	else
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return tex_id;
+}
+
+
+void DE::GL::draw_mesh(int vao, int vertex_count, int tex_id)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0);
 
 	glCheckError_(__FILE__, __LINE__);
 }
 
-
+/*
 void DE::GL::draw_mesh(int vao, int mode, int vertex_count)
 {
     glBindVertexArray(vao);
     glDrawElements(mode, vertex_count, GL_UNSIGNED_INT, 0);
 }
+
+void DE::GL::draw_mesh(int vao, int mode, int vertex_count, int tex_id)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex_id);
+    glBindVertexArray(vao);
+    glDrawElements(mode, vertex_count, GL_UNSIGNED_INT, 0);
+}
+*/
 
 int DE::GL::glCheckError_(const char *file, int line)
 {

@@ -28,12 +28,20 @@ class Sandbox : public App
                 -1.0f, -1.0f, 0.0f, // Bottom left
             };
 
+				float tex_coords[] = {
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f
+	};
             unsigned int indices[] = {
                 0, 1, 2,
                 2, 3, 0
             };
 
-			mesh.vao_id = create_mesh2d(vertices, 12, indices, 6);
+			// mesh.vao_id = create_mesh2d(vertices, 12, indices, 6);
+			mesh.vao_id = create_mesh({12, 6, 8, vertices, tex_coords, indices});
+			mesh.texture_id = create_texture("assets/joker.png");
 
 			mesh.x = -540.0f;
 			mesh.y = 540.0f;

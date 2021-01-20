@@ -8,12 +8,14 @@
 
 #include "dull_engine.h"
 #include "colors.h"
+#include "ogl_api.h"
 
 namespace DE
 {
 	struct DE_API Mesh
 	{
 		int vao_id;
+		int texture_id;
 		int vertex_count;
 		float x, y;
 		float scale;
@@ -27,6 +29,9 @@ namespace DE
 
 	DE_API int create_mesh2d(float * vertices, int vsize);
 	DE_API int create_mesh2d(float * vertices, int vsize, unsigned int *indices, int isize);
+	DE_API int create_mesh(DE::GL::vao_data_t vao);
+	DE_API int create_texture(const char * path);
+
 	DE_API void draw_mesh2d(int mesh_id);
 	DE_API void draw_mesh2d(Mesh * mesh);
 

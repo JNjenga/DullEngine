@@ -22,6 +22,14 @@ namespace DE
 			std::unordered_map<const char *, int> uniforms;
 		};
 
+		struct vao_data_t 
+		{
+			int vsize, isize, tsize;
+			float *vertices;
+			float *texture_coords;
+			unsigned int *indices;
+		};
+
 		void init_opengl();
 		DE_API inline void clear();
 		DE_API inline void clear(DE::Color & color);
@@ -40,8 +48,13 @@ namespace DE
 
 		int create_vao(float vertices[], int vsize);
 		int create_vao(float vertices[], int vsize, unsigned int indices[], int isize);
-		void draw_mesh(int vao_id, int vertex_count);
-		void draw_mesh(int vao_id, int mode, int vertex_count);
+
+		int create_vao(vao_data_t * vd);
+		int create_texture(unsigned char * data, int width, int height, int depth);
+
+		void draw_mesh(int vao_id, int vertex_count, int tex_id);
+		// void draw_mesh(int vao_id, int mode, int vertex_count);
+		// void draw_mesh(int vao, int mode, int vertex_count, int tex_id);
 		void draw_primitive( int vao_id, int mode, int vertex_count);
 		int glCheckError_(const char * file, int line);
 }

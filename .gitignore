@@ -1,7 +1,8 @@
 Engine/3rdParty/*
 Build/*
 Workspace/*
-.swp
+*.swp
+Engine/src/.swp
 
 # Prerequisites
 *.d

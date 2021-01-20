@@ -39,6 +39,7 @@ workspace "DullEngine"
             "Engine/3rdParty/glfw3/include",
             "Engine/3rdParty/glew/include",
             "Engine/3rdParty/glm",
+            "Engine/3rdParty/stb",
         }
 
         links { "Opengl32", "glfw3", "glew32s" }
