@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "ogl_api.h"
+#include "util.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -24,30 +25,12 @@ void DE::clear()
 void DE::init_engine()
 {
 	DE::GL::init_opengl();
-	const char *vsource= "#version 330 core\n"
-		"layout (location = 0)in vec3 aPos;\n"
-		"layout (location = 1)in vec2 aTexCoord;\n"
-		"uniform mat4 p_mat = mat4(1.0f);\n"
-		"uniform mat4 m_mat = mat4(1.0f);\n"
-		"out vec3 col;\n"
-		"out vec2 tex_coord;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position =  p_mat * m_mat * vec4(aPos, 1.0f);\n"
-		"	col = aPos;"
-		"	tex_coord = aTexCoord;"
-		"}\0";
 
-	const char *fsource= "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"in vec3 col;\n"
-		"in vec2 tex_coord;\n"
-		"uniform sampler2D tex;\n"
-		"void main()\n"
-		"{\n"
-		"   FragColor = texture(tex, tex_coord) * vec4(col, 1.0f);\n"
-		"}\n\0";
-	shader = DE::GL::create_shader(fsource, vsource);
+    std::string vsource, fsource;
+    DE::read_file("assets/vert.glsl", vsource);
+    DE::read_file("assets/frag.glsl", fsource);
+
+	shader = DE::GL::create_shader(fsource.c_str(), vsource.c_str());
 	glUseProgram(shader->shader_id);
 	DE::GL::glCheckError_(__FILE__, __LINE__);
 }
