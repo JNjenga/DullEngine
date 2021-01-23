@@ -42,7 +42,10 @@ workspace "DullEngine"
             "Engine/3rdParty/stb",
         }
 
-        links { "Opengl32", "glfw3", "glew32s" }
+	filter{"system:windows"}
+		links { "Opengl32", "glfw3", "glew32s" }
+		filter{"system:not windows"}
+		links {"GL", "glfw", "GLEW"}
 
     project "SandBox"
         kind "ConsoleApp"

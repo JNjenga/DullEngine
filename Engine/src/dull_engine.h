@@ -1,8 +1,16 @@
 #pragma once
 
 #ifdef DE_EXPORTS_
-	#define DE_API __declspec(dllexport)
+    #ifdef _WIN32
+	    #define DE_API __declspec(dllexport)
+	#elif __linux__
+	    #define DE_API __attribute__((visibility("default")))
+    #endif
 #else
-	#define DE_API __declspec(dllimport)
+    #ifdef _WIN32
+	    #define DE_API __declspec(dllimport)
+	#elif __linux__
+	    #define DE_API
+    #endif
 #endif
 
