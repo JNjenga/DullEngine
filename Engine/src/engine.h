@@ -7,6 +7,7 @@
  */
 
 #include "dull_engine.h"
+#include <GL/glew.h>
 #include "colors.h"
 #include "ogl_api.h"
 
@@ -21,8 +22,8 @@ namespace DE
 		float scale;
 	};
 
-	DE_API inline void clear(DE::Color &);
-	DE_API inline void clear();
+	DE_API inline void clear(DE::Color & color){ DE::GL::clear(color); }
+	DE_API inline void clear(){ DE::GL::clear(); }
 	DE_API void init_engine();
 
 	DE_API void set_window_bounds(float xbegin, float ybegin, float xend, float yend);

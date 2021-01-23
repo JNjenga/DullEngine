@@ -5,6 +5,12 @@
 
 namespace DE
 {
+	struct DE_API input_t
+	{
+		int *keys;
+		float mouse_x, mouse_y;
+	};
+
 	class DE_API App
 	{
 		protected:

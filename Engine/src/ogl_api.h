@@ -8,6 +8,7 @@
 #pragma once
 #include "dull_engine.h"
 #include "colors.h"
+#include <GL/glew.h>
 #include <glm/glm.hpp> 
 
 #include <unordered_map>
@@ -31,8 +32,17 @@ namespace DE
 		};
 
 		void init_opengl();
-		DE_API inline void clear();
-		DE_API inline void clear(DE::Color & color);
+
+		inline void clear()
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+
+		inline void clear(DE::Color & color)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(color.r, color.g, color.b, color.a);
+        }
 
 		// Shader stuff
 		shader_program_t * create_shader(const char * fsource,

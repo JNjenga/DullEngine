@@ -4,6 +4,8 @@
 #include "colors.h"
 #include <stdlib.h> 
 
+DE_API DE::input_t * input_data;
+
 DE::App::App()
 {
 }
@@ -19,6 +21,9 @@ DE::App::~App()
 
 void DE::App::create()
 {
+	input_data = new DE::input_t();
+	input_data->keys = new int[1024];
+
 	window = new DE::Window();
 	window->create(width, height);
 
@@ -58,4 +63,6 @@ void DE::App::render()
 void DE::App::exit()
 {
 	onExit();
+	delete input_data->keys;
+	delete input_data;
 }

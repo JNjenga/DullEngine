@@ -1,5 +1,8 @@
 #include "glfw_window.h"
 #include <GLFW/glfw3.h>
+#include "app.h"
+
+extern DE::input_t * input_data;
 
 void DE::Window::create(int width, int height)
 {
@@ -19,7 +22,12 @@ void DE::Window::create(int width, int height)
 	auto fb_clbk = [](GLFWwindow *win, int w, int h){
 		glViewport(0,0,w,h);
 	};
+
 	glfwSetFramebufferSizeCallback(mWindow, fb_clbk);
+
+	glfwSetKeyCallback(mWindow,DE::key_clb);
+	glfwSetMouseButtonCallback(mWindow, DE::mkey_clb);
+    // glfwSetCursorPosCallback(window, mpos_clb);
 }
 
 void DE::Window::update()
@@ -35,4 +43,31 @@ void DE::Window::exit()
 {
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
+}
+
+void DE::key_clb(GLFWwindow * w, int key, int scancode, int action, int modes)
+{
+    if(action == GLFW_PRESS)
+    {
+        input_data->keys[key] = key;
+    }else if(action == GLFW_RELEASE)
+    {
+        input_data->keys[key] = 0;
+    }
+}
+
+void DE::mkey_clb(GLFWwindow * w, int button, int action, int mods)
+{
+    if(action == GLFW_PRESS)
+    {
+        input_data->keys[button] = button;
+    }else if(action == GLFW_RELEASE)
+    {
+        input_data->keys[button] = 0;
+    }
+}
+
+void DE::resize_clb(GLFWwindow*win, int w, int h)
+{
+	glViewport(0,0,w,h);
 }

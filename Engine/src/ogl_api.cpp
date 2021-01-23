@@ -9,16 +9,6 @@ void DE::GL::init_opengl()
 {
 }
 
-void DE::GL::clear()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void DE::GL::clear(DE::Color & color)
-{
-	glClearColor(color.r, color.g, color.b, color.a);
-}
-
 DE::GL::shader_program_t *
 DE::GL::create_shader(const char * fsource, const char * vsource)
 {
@@ -95,7 +85,8 @@ int DE::GL::setu_mat4(shader_program_t *shader, const char * name, glm::mat4 val
 	glUniformMatrix4fv(DE::GL::get_uniform_loc(shader, name),1, GL_FALSE,glm::value_ptr(value));
 	return -1;
 }
-int DE::GL::create_vao(float vertices[], int vsize)
+
+int DE::GL::create_vao(float *vertices, int vsize)
 {
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
@@ -113,7 +104,7 @@ int DE::GL::create_vao(float vertices[], int vsize)
 	return vao;
 }
 
-int DE::GL::create_vao(float vertices[], int vsize, unsigned int indices[], int isize)
+int DE::GL::create_vao(float *vertices, int vsize, unsigned int * indices, int isize)
 {
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);

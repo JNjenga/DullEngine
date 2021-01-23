@@ -14,4 +14,8 @@ namespace DE
 			void update();
 			void exit();
 	};
+
+	void key_clb(GLFWwindow * w, int key, int scancode, int action, int modes);
+	void mkey_clb(GLFWwindow * w, int button, int action, int mods);	
+	void resize_clb(GLFWwindow*win, int w, int h);
 }

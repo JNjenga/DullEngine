@@ -12,16 +12,6 @@
 
 static DE::GL::shader_program_t * shader;
 
-void DE::clear(DE::Color & color)
-{
-	DE::GL::clear(color);
-}
-
-void DE::clear()
-{
-	DE::GL::clear();
-}
-
 void DE::init_engine()
 {
 	DE::GL::init_opengl();
