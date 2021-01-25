@@ -2,6 +2,7 @@
 
 #include "dull_engine.h"
 #include "glfw_window.h"
+#include "scene.h"
 
 namespace DE
 {
@@ -15,7 +16,10 @@ namespace DE
 	{
 		protected:
 			Window *window;
+			Scene *current_scene;
 		public:
+			static DE::input_t * input_data;
+
 			int width, height;
 			bool isRunning;
 

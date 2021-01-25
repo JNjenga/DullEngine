@@ -4,7 +4,7 @@
 #include "colors.h"
 #include <stdlib.h> 
 
-DE_API DE::input_t * input_data;
+DE::input_t * DE::App::input_data = nullptr;
 
 DE::App::App()
 {
@@ -21,8 +21,8 @@ DE::App::~App()
 
 void DE::App::create()
 {
-	input_data = new DE::input_t();
-	input_data->keys = new int[1024];
+	DE::App::input_data = new DE::input_t();
+	DE::App::input_data->keys = new int[1024];
 
 	window = new DE::Window();
 	window->create(width, height);

@@ -3,15 +3,17 @@
 #include <glfw_window.h>
 #include <app.h>
 #include <engine.h>
+#include "IntroScene.h"
+#include "first_scene.h"
 
 using namespace DE;
-
-extern DE_API DE::input_t * input_data;
 
 class Sandbox : public App 
 {
 	public :
-		Mesh mesh;
+		DE::Scene* scenes[2];
+		int current_scene;
+
 		Sandbox() 
 		{
 			width = 640;
@@ -22,34 +24,13 @@ class Sandbox : public App
 		{
 			// Initialize projection matrix
 			DE::set_window_bounds(-640.0f, 640.0f, 640.0f, -640.0f);
+			
+			current_scene = 0;
+            scenes[current_scene] = new IntroScene(); 
+            scenes[current_scene]->onStart();
 
-			float vertices[] = {
-				-1.0f, 1.0f, 0.0f, // Top left
-				1.0f, 1.0f, 0.0f, // Top right
-				1.0f, -1.0f, 0.0f, // Bottom right
-				-1.0f, -1.0f, 0.0f, // Bottom left
-			};
-
-			float tex_coords[] = {
-				0.0f, 1.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f,
-				0.0f, 0.0f
-			};
-			unsigned int indices[] = {
-				0, 1, 2,
-				2, 3, 0
-			};
-
-			// mesh.vao_id = create_mesh2d(vertices, 12, indices, 6);
-			mesh.vao_id = create_mesh({12, 6, 8, vertices, tex_coords, indices});
-			mesh.texture_id = create_texture("assets/joker.png");
-
-			mesh.x = -540.0f;
-			mesh.y = 540.0f;
-			mesh.scale = 100.0f;
-			mesh.vertex_count = 6;
-		};
+            scenes[1] = new FirstScene(); 
+		}
 
 		void onUpdate() override
 		{
@@ -66,37 +47,36 @@ class Sandbox : public App
 #endif
 
 			// Option two
-			if(input_data->keys[GLFW_KEY_ESCAPE] == GLFW_KEY_ESCAPE)
+			if(App::input_data->keys[GLFW_KEY_ESCAPE] == GLFW_KEY_ESCAPE)
 			{
 				// Do some stuff
 				// std::exit(1);
                 isRunning = false;
 			}
-		};
+
+            if(!scenes[current_scene]->isActive)
+			{
+				scenes[current_scene]->onDestroy();
+				if(current_scene == 1)
+						current_scene = 0;
+				else
+						current_scene = 1;
+
+				scenes[current_scene]->onStart();
+			}
+
+            scenes[current_scene]->onUpdate(0.0f);
+		}
 
 		void onRender() override
 		{
-#if 1
-			for(size_t i = 0; i < 7; i++)
-			{
-				for(size_t j = 0; j < 7; j++)
-				{
-					draw_mesh2d(&mesh);
-					mesh.x += 200.0f;
-				}
-				mesh.x = -540.0f;
-				mesh.y -= 200.0f;
-			}
+            scenes[current_scene]->onRender();
+		}
 
-			mesh.y = 540.0f;
-#else
-			mesh.x = -640.0f;
-			mesh.y = 640.0f;
-			draw_mesh2d(&mesh);
-#endif
-		};
-
-		void onExit() override {};
+		void onExit() override
+        {
+            scenes[current_scene]->onDestroy();
+        }
 };
 
 App * init_app()

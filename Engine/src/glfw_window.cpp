@@ -2,8 +2,6 @@
 #include <GLFW/glfw3.h>
 #include "app.h"
 
-extern DE::input_t * input_data;
-
 void DE::Window::create(int width, int height)
 {
 	glfwInit();
@@ -49,10 +47,10 @@ void DE::key_clb(GLFWwindow * w, int key, int scancode, int action, int modes)
 {
     if(action == GLFW_PRESS)
     {
-        input_data->keys[key] = key;
+       DE::App::input_data->keys[key] = key;
     }else if(action == GLFW_RELEASE)
     {
-        input_data->keys[key] = 0;
+        DE::App::input_data->keys[key] = 0;
     }
 }
 
@@ -60,10 +58,10 @@ void DE::mkey_clb(GLFWwindow * w, int button, int action, int mods)
 {
     if(action == GLFW_PRESS)
     {
-        input_data->keys[button] = button;
+        DE::App::input_data->keys[button] = button;
     }else if(action == GLFW_RELEASE)
     {
-        input_data->keys[button] = 0;
+        DE::App::input_data->keys[button] = 0;
     }
 }
 
